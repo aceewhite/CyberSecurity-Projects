@@ -1,56 +1,83 @@
-# Hybrid Enterprise Security Architecture & Penetration Testing Portfolio
+Hybrid Enterprise Security Architecture & Penetration Testing Portfolio
+=======================================================================
 
-##  Overview
-This repository contains comprehensive technical documentation, deployment scripts, network topologies, and exploit verification capture logs for a series of advanced security engineering labs. 
+Overview
+--------
 
-The portfolio bridges the gap between **Defensive Infrastructure Hardening** and **Offensive Cyber Operations**. It demonstrates hands-on expertise in building secure Windows Server/Linux corporate directories, performing full-scale network reconnaissance, engineering automated vulnerability scans, and executing controlled exploitation/domain privilege escalation within fully sandboxed virtual labs.
+Technical documentation and lab artifacts covering Active Directory hardening, network reconnaissance, automated vulnerability scanning, and post-exploitation — built across VMware/VirtualBox environments on Windows Server 2019 and Kali Linux.
 
----
+Portfolio Architecture & Core Domains
+-------------------------------------
 
-##  Portfolio Architecture & Core Domains
+1\. Enterprise Identity Management & Baseline System Hardening
+--------------------------------------------------------------
 
-### 1. Enterprise Identity Management & Baseline System Hardening
-* **Environment & Tools:** Windows Server 2019 Standard, Windows 10 Enterprise, VMware Workstation
-* **Core Implementations:**
-  * Provisioned **Active Directory Domain Services (AD DS)** and established verified cross-workstation domain connectivity.
-  * Structured corporate user directories using **Organizational Units (OUs)**, nesting custom security group privileges, and configuring automated user tracking.
-  * Deployed structural **Group Policy Objects (GPOs)** to enforce domain-wide account policies, restrict administrative exposure, and lock down unauthorized local tools.
-  * Implemented strict access control restrictions on shared network volumes via NTFS permissions and file sharing audits.
+**Environment & Tools:** Windows Server 2019 Standard, Windows 10 Enterprise, VMware Workstation
 
-### 2. Network Reconnaissance, Data Parsing & Asset Filtering
-* **Environment & Tools:** Kali Linux, Vagrant, Packer Automated Provisioning, `nmap`, `netcat (nc)`, `ncat`
-* **Core Implementations:**
-  * Orchestrated multi-phase automated subnet mapping and structural host sweeps to discover live network interfaces.
-  * Engineered Unix command-line parsing pipelines using `grep`, `cut`, and `sort -u` to extract and convert raw `.nmap` and `.gnmap` scan outputs into clean, target-focused host indexes.
-  * Isolated network assets into functional profiles, dynamically segregating running web interfaces (`web.txt`), database layers (`mssql.txt`), and active OS instances (`windows.txt`) to build clear network topology landscapes.
+*   Provisioned AD DS and verified domain connectivity across multiple workstations.
+    
+*   Built OU hierarchy with nested security groups to delegate least-privilege access across 3 simulated departments.
+    
+*   Configured GPOs to enforce password policy, disable USB storage, and block unapproved executables domain-wide.
+    
+*   Restricted shared network volume access via NTFS permissions and enabled file sharing audits.
+    
 
-### 3. Automated Vulnerability Auditing & Exploit Profiling
-* **Environment & Tools:** Kali Linux, ProjectDiscovery `Nuclei` Engine, YAML Scripting
-* **Core Implementations:**
-  * Deployed the **Nuclei template engine** to conduct rapid, signature-based vulnerability indexing against critical network middleware.
-  * Engineered and executed customized vulnerability scanning templates (e.g., `jenkins-fuzz.yaml`) to automate credential fuzzing and authentication testing.
-  * Programmed compound **conditional matchers** (mapping HTTP `302 Found` response codes, isolating positive `Location:` flags, and utilizing negative matches on string structures like `loginError`) to dynamically verify successful system exposures without generating false positives.
+2\. Network Reconnaissance, Data Parsing & Asset Filtering
+----------------------------------------------------------
 
-### 4. Penetration Testing: Endpoint Exploitation & Domain Compromise
-* **Environment & Tools:** Metasploit Framework (`msfconsole`), `NetExec (nxc)`, `Secretsdump`, `Evil-WinRM`, Oracle VirtualBox
-* **Core Implementations:**
-  * Leveraged auxiliary SMB scanners (`ms17_010 / DOUBLEPULSAR`) to systematically profile legacy target OS systems for remote code execution vulnerabilities.
-  * Executed controlled exploitation of the **EternalBlue (MS17-010)** flaw to establish reverse shell sessions and dump system hashes.
-  * Performed stealthy **User Hunting** across Windows targets using `NetExec` to track and isolate highly privileged Domain Administrator accounts without triggering local defenses.
-  * Executed **Living-off-the-Land (LotL)** lateral movement via `Evil-WinRM`, abusing native PowerShell Remoting mechanics to operate purely in volatile memory (RAM) and bypass traditional EDR defenses.
-  * Conducted a **DCSync attack** using Impacket's `secretsdump` tool, mimicking Domain Controller replication behavior via the `MS-DRSR` protocol to dump the entire Active Directory credential database (`ntds.dit`).
+**Environment & Tools:** Kali Linux, Vagrant, Packer, nmap, netcat, ncat
 
-### 5. Network Security Monitoring & Real-Time Intrusion Detection
-* **Environment & Tools:** Ubuntu Linux, Snort Engine Engine (NIDS Mode)
-* **Core Implementations:**
-  * Deployed and customized the **Snort IDS/IPS** engine across specialized network configurations (`snort.conf`).
-  * Written and tuned custom string and protocol rules to intercept real-time packet streams, successfully logging and generating behavioral alerts against active network threat vectors (ICMP sweeps, fingerprinting, and application layer attacks).
+*   Ran phased nmap subnet sweeps to enumerate live hosts, open ports, and OS fingerprints across the lab range.
+    
+*   Parsed .gnmap output with grep/cut/sort -u to auto-generate target lists segmented by service (web.txt, mssql.txt, windows.txt).
+    
+*   Profiled discovered assets by role to build a working network topology before active exploitation.
+    
 
-### 6. Applied Cryptography & Core Infrastructure Protocols
-* **Environment & Tools:** Linux Network Utilities (`dig`), `OpenPuff Steganography`, SMTP Infrastructure
-* **Core Implementations:**
-  * Analyzed structural cryptographic hashing digest algorithms (MD5 vs SHA-256/512) to demonstrate the **Avalanche Effect** and data fingerprinting mechanics for file integrity validation.
-  * Audited critical internet backbone protocols using `dig +dnssec` to inspect cryptographic resource records (`RRSIG`, `DNSKEY`), confirming defenses against cache poisoning and domain redirection attacks.
-  * Evaluated Simple Mail Transfer Protocol (SMTP) headers and Mail Transfer Agent (MTA) pathways to trace message routing validity and flag spoofing anomalies.
+3\. Automated Vulnerability Auditing & Exploit Profiling
+--------------------------------------------------------
 
----
+**Environment & Tools:** Kali Linux, ProjectDiscovery Nuclei, YAML
+
+*   Deployed Nuclei against web-facing services to scan for known CVEs and authentication misconfigurations.
+    
+*   Wrote a custom jenkins-fuzz.yaml template to automate credential fuzzing against Jenkins login endpoints.
+    
+*   Configured compound matchers (HTTP 302, positive Location: header, negative loginError string) to confirm successful authentication bypass without false positives.
+    
+
+4\. Penetration Testing: Endpoint Exploitation & Domain Compromise
+------------------------------------------------------------------
+
+**Environment & Tools:** Metasploit (msfconsole), NetExec, Secretsdump, Evil-WinRM, VirtualBox
+
+*   Used the ms17\_010 auxiliary scanner to identify unpatched SMBv1 hosts, then exploited EternalBlue to establish reverse shell sessions and dump local hashes.
+    
+*   Ran NetExec SMB user-hunting modules to locate Domain Administrator sessions across live hosts without triggering local defenses.
+    
+*   Moved laterally via Evil-WinRM, executing payloads in-memory through PowerShell Remoting to avoid touching disk and evade AV/EDR.
+    
+*   Ran a DCSync attack with Impacket secretsdump, replicating DC behavior over MS-DRSR to extract the full ntds.dit credential database.
+    
+
+5\. Network Security Monitoring & Real-Time Intrusion Detection
+---------------------------------------------------------------
+
+**Environment & Tools:** Ubuntu Linux, Snort (NIDS Mode)
+
+*   Deployed and configured the Snort engine with a custom snort.conf across the lab network.
+    
+*   Wrote and tuned rules to detect ICMP sweeps, OS fingerprinting attempts, and app-layer attack signatures; validated alerts against live lab traffic.
+    
+
+6\. Applied Cryptography & Core Infrastructure Protocols
+--------------------------------------------------------
+
+**Environment & Tools:** dig, OpenPuff, Linux network utilities, SMTP
+
+*   Compared MD5 vs SHA-256/512 outputs to demonstrate the avalanche effect and MD5's collision weakness for file integrity use cases.
+    
+*   Used dig +dnssec to pull and verify RRSIG/DNSKEY records, confirming DNSSEC chain-of-trust against cache poisoning scenarios.
+    
+*   Traced SMTP headers and MTA relay paths to identify spoofing anomalies and validate message routing integrity.
