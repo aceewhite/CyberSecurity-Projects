@@ -1,13 +1,13 @@
 # Hybrid Enterprise Security Architecture & Penetration Testing Portfolio
 
-## 🌐 Overview
+##  Overview
 This repository contains comprehensive technical documentation, deployment scripts, network topologies, and exploit verification capture logs for a series of advanced security engineering labs. 
 
 The portfolio bridges the gap between **Defensive Infrastructure Hardening** and **Offensive Cyber Operations**. It demonstrates hands-on expertise in building secure Windows Server/Linux corporate directories, performing full-scale network reconnaissance, engineering automated vulnerability scans, and executing controlled exploitation/domain privilege escalation within fully sandboxed virtual labs.
 
 ---
 
-## 🛠️ Portfolio Architecture & Core Domains
+##  Portfolio Architecture & Core Domains
 
 ### 1. Enterprise Identity Management & Baseline System Hardening
 * **Environment & Tools:** Windows Server 2019 Standard, Windows 10 Enterprise, VMware Workstation
@@ -54,13 +54,3 @@ The portfolio bridges the gap between **Defensive Infrastructure Hardening** and
   * Evaluated Simple Mail Transfer Protocol (SMTP) headers and Mail Transfer Agent (MTA) pathways to trace message routing validity and flag spoofing anomalies.
 
 ---
-
-## 📂 Repository Structural Layout
-
-```text
-├── 01_enterprise_hardening/       # Active Directory, GPOs, and Access Control documentation
-├── 02_network_reconnaissance/     # Subnet sweeps, Nmap scripts, and custom asset parsing filters
-├── 03_vulnerability_automation/   # Nuclei vulnerability fuzzing templates and matcher configs
-├── 04_penetration_testing/        # EternalBlue exploits, User Hunting, Evil-WinRM, and DCSync logs
-├── 05_intrusion_detection/        # Snort engine parameters and custom detection rulesets
-└── 06_protocol_cryptography/      # DNSSEC cryptographic signature mapping and steganography analysis# CyberSecurity-Projects
